@@ -15,16 +15,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true, length = 20)
+    @Column(unique = true, length = 20, nullable = false)
     private String username;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String password;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String email;
 
-    public void updatePassword(String password) {
-        this.password = password;
-    }
 
     @Builder
     public User(Integer id, String username, String password, String email) {
