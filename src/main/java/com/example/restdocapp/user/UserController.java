@@ -6,12 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,16 +34,20 @@ public class UserController {
         // return new ResponseEntity<>("null", HttpStatus.BAD_REQUEST); // 다른 응답할 때
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(){
-
-        return ResponseEntity.ok().body(null);
-    }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> userInfo(){
+    public ResponseEntity<?> userInfo(@PathVariable Integer id){
 
-        return ResponseEntity.ok().body(null);
+        Optional<User> userOP = userRepository.findById(id);
+
+        if(userOP.isEmpty()){
+            return new ResponseEntity<>(
+                    ApiUtil.error("해당 아이디가 존재하지 않습니다."),
+                    HttpStatus.NOT_FOUND
+            );
+        }
+        return ResponseEntity.ok().body(ApiUtil.success(userOP.get()));
+
     }
 
 }
