@@ -1,5 +1,6 @@
 package com.example.restdocapp.user;
 
+import com.example.restdocapp.util.ApiUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import javax.validation.Valid;
 @RestController
 public class UserController {
 
+    private final UserRepository userRepository;
+
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody @Valid UserRequest.JoinDTO requestDTO, Errors errors){
 
@@ -23,11 +26,12 @@ public class UserController {
             FieldError fieldError = errors.getFieldErrors().get(0);
             String key = fieldError.getField();
             String value = fieldError.getDefaultMessage();
-            return new ResponseEntity<>(value+":"+key, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ApiUtil.error(value+":"+key), HttpStatus.BAD_REQUEST);
         }
 
+        User user = userRepository.save(requestDTO.toEntity());
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(ApiUtil.success(user));
         // return ResponseEntity.ok(null);
         // return new ResponseEntity<>("null", HttpStatus.BAD_REQUEST); // 다른 응답할 때
     }
