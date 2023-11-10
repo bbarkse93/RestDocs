@@ -54,7 +54,7 @@ public class UserControllerTest extends MyWithRestDoc {
     }
 
     @Test
-    public void userInfo_test() throws Exception {
+    public void user_info_test() throws Exception {
         // given
         int id = 1;
 
